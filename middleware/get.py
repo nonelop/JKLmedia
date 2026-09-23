@@ -27,7 +27,7 @@ def file_id(id):
 
     connection.close()
 
-    return file_id[0]
+    return file_id
 
 
 def balance(user_id):
