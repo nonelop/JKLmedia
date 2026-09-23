@@ -1,6 +1,7 @@
 from config import bot
 from middleware import get
 from PIL import Image
+import io
 
 
 def media_id_to_file(media_id):
@@ -8,7 +9,7 @@ def media_id_to_file(media_id):
     file_info = bot.get_file(file_id)
     file_path = file_info.file_path
 
-    return bot.download_file(str(file_path))
+    return io.BytesIO(bot.download_file(str(file_path)))
 
 def photo_to_size(photo):
     image = Image.open(photo)

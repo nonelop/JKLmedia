@@ -14,16 +14,7 @@ def photo_default(photo):
     width = image.width
     height = image.height
 
-    size = width * height
-
-    if size >= 1_000_000:
-        coefficient = 15
-    elif size <= 1_000_000 and size >= 500_000:
-        coefficient = 10
-    else:
-        coefficient = 5
-
-    image = image.resize(size=(width // coefficient, height // coefficient))
+    image = image.resize(size=(round(width * 0.2), round(height * 0.2)))
 
     photo.seek(0)
 

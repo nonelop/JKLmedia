@@ -31,6 +31,23 @@ def recv_photo_inline(photo_id):
     return markup
 
 
+def done_shakal_photo_inline(photo_id):
+    markup = types.InlineKeyboardMarkup()
+
+    more = types.InlineKeyboardButton(
+        text="Больше", callback_data=f"process:photo:shakal:{photo_id}"
+    )
+    less = types.InlineKeyboardButton(
+        text="Меньше", callback_data=f"process:photo:shakal:{photo_id}"
+    )
+    back = types.InlineKeyboardButton(text="◀️ Назад", callback_data="menu:start")
+
+    markup.row(more, less)
+    markup.add(back)
+
+    return markup
+
+
 def variants_inline():
     markup = types.InlineKeyboardMarkup()
 

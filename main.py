@@ -29,6 +29,8 @@ def photo(message):
 
 @bot.callback_query_handler()
 def callback(callback):
+    bot.answer_callback_query(callback_query_id=callback.id)
+
     if isinstance(callback.data, str):
         match callback.data.split(":"):
             case ["menu", "start"]:
@@ -53,12 +55,10 @@ def callback(callback):
 
             case ["process", "photo", "shakal", photo_id]:
                 photo = parse.media_id_to_file(photo_id)
-                photo = io.BytesIO(photo)
 
                 menu.process_photo_menu(
                     chat_id=callback.message.chat.id,
                     message_to_edit_id=callback.message.message_id,
-                    photo_size=parse.photo_to_size(photo),
                     process_mode="Шакал"
                 )
 
@@ -66,7 +66,13 @@ def callback(callback):
                     file=photo, file_type="photo", mode="default"
                 )
 
-                bot.send_photo(chat_id=callback.message.chat.id, photo=processed_photo)
+                menu.done_photo_menu(
+                    chat_id=callback.message.chat.id,
+                    message_to_edit_id=callback.message.message_id,
+                    photo=processed_photo,
+                    photo_id=photo_id,
+                    process_time=228,
+                )
 
 
 database.init_database()
