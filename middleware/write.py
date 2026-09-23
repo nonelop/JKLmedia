@@ -11,18 +11,18 @@ def new_user(user_id):
     connection.close()
 
 
-def new_media(file_id, file_unique_id):
+def new_media(file_id, file_unique_id, message_id, chat_id):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
 
     cursor.execute(
-        "INSERT OR IGNORE INTO media (file_id, file_unique_id) VALUES (?, ?)",
-        (file_id, file_unique_id),
+        "INSERT OR IGNORE INTO media (file_id, file_unique_id, message_id, chat_id) VALUES (?, ?, ?, ?)",
+        (file_id, file_unique_id, message_id, chat_id),
     )
 
     connection.commit()
 
-    cursor.execute("SELECT id FROM media WHERE (file_id) = (?)", (file_id,))
+    cursor.execute("SELECT id FROM media WHERE (file_unique_id) = (?)", (file_unique_id,))
     id = cursor.fetchone()
 
     connection.close()

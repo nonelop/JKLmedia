@@ -15,7 +15,9 @@ def init_database():
     cursor.execute("""CREATE TABLE IF NOT EXISTS media (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         file_id TEXT UNIQUE,
-        file_unique_id TEXT UNIQUE
+        file_unique_id TEXT UNIQUE,
+        message_id INT,
+        chat_id INT
     )""")
 
     connection.commit()

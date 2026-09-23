@@ -1,13 +1,29 @@
 import sqlite3
+from config import bot
+from config import SERVICE_CHANNEL_ID
 
 
 def file_id(id):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
 
-    cursor.execute("""SELECT file_id FROM media WHERE id = (?)""", (id,))
+    cursor.execute("""SELECT message_id FROM media WHERE id = (?)""", (id,))
+    message_id = cursor.fetchone()
+    cursor.execute("""SELECT chat_id FROM media WHERE id = (?)""", (id,))
+    chat_id = cursor.fetchone()
 
-    file_id = cursor.fetchone()
+    message = bot.forward_message(
+        chat_id=SERVICE_CHANNEL_ID,
+        from_chat_id=chat_id,
+        message_id=message_id
+    )
+
+    try:
+        photo = message.photo[-1] # type: ignore
+        file_id = photo.file_id
+    except:
+        return None
+
 
     connection.close()
 

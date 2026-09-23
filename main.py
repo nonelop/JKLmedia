@@ -22,7 +22,9 @@ def photo(message):
     file_id = photo.file_id
     file_unique_id = photo.file_unique_id
 
-    photo_id = write.new_media(file_id, file_unique_id)
+    photo_id = write.new_media(
+        file_id, file_unique_id, message_id=message.message_id, chat_id=message.chat.id
+    )
 
     menu.recv_photo_menu(chat_id=message.chat.id, file_id=file_id, photo_id=photo_id)
 
