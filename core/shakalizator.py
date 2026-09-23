@@ -14,7 +14,14 @@ def photo_default(photo):
     width = image.width
     height = image.height
 
-    image = image.resize(size=(round(width * 0.2), round(height * 0.2)))
+    size = width * height
+    intensity = 0.03
+    power = 0.38
+
+    coefficient = intensity * (size ** power)
+    coefficient = max(2, round(coefficient))
+
+    image = image.resize(size=(width // coefficient, height // coefficient))
 
     photo.seek(0)
 
