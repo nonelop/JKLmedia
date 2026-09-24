@@ -4,8 +4,12 @@ from interface import menu
 from middleware import get
 from middleware import write
 from middleware import parse
+from middleware import process
+from middleware import catch
 from core import shakalizator
 import io
+import time
+from telebot import types
 
 
 @bot.message_handler(commands=["start"])
@@ -36,6 +40,9 @@ def callback(callback):
     if isinstance(callback.data, str):
         match callback.data.split(":"):
             case ["menu", "start"]:
+                bot.clear_step_handler_by_chat_id(
+                    callback.message.chat.id
+                )
                 menu.start_menu(
                     chat_id=callback.message.chat.id,
                     message_to_edit_id=callback.message.message_id,
@@ -46,7 +53,10 @@ def callback(callback):
                     message_to_edit_id=callback.message.message_id,
                 )
             case ["menu", "variants", "photo"]:
-                pass
+                menu.variants_photos_menu(
+                    chat_id=callback.message.chat.id,
+                    message_to_edit_id=callback.message.message_id
+                )
 
             case ["user", "balance"]:
                 menu.balance_menu(
@@ -55,25 +65,26 @@ def callback(callback):
                     user_id=callback.from_user.id,
                 )
 
-            case ["process", "photo", "shakal", photo_id]:
+            case ["process", "photo", "shakal"]:
+                message = menu.shakal_photo_menu(
+                    chat_id=callback.message.chat.id,
+                    message_to_edit_id=callback.message.message_id
+                )
+                if isinstance(message, types.Message):
+                    bot.register_next_step_handler(
+                        message=message,
+                        callback=catch.photo,
+                        mode="shakal"
+                    )
+            case ["process", "photo", "shakal", photo_id, coefficient]:
                 photo = parse.media_id_to_file(photo_id)
 
-                menu.process_photo_menu(
-                    chat_id=callback.message.chat.id,
-                    message_to_edit_id=callback.message.message_id,
-                    process_mode="Шакал"
-                )
-
-                processed_photo = shakalizator.router(
-                    file=photo, file_type="photo", mode="default"
-                )
-
-                menu.done_photo_menu(
-                    chat_id=callback.message.chat.id,
-                    message_to_edit_id=callback.message.message_id,
-                    photo=processed_photo,
+                process.photo(
+                    mode="shakal",
+                    photo=photo,
                     photo_id=photo_id,
-                    process_time=228,
+                    coefficient=float(coefficient),
+                    message=callback.message,
                 )
 
 

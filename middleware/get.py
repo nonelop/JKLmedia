@@ -41,3 +41,16 @@ def balance(user_id):
     connection.close()
 
     return balance[0]
+
+
+def coefficient(media_id):
+    connection = sqlite3.connect("database/database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("""SELECT coefficient FROM media WHERE id = (?)""", (media_id,))
+
+    coefficient = cursor.fetchone()
+
+    connection.close()
+
+    return coefficient[0]

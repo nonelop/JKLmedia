@@ -28,3 +28,13 @@ def new_media(file_id, file_unique_id, message_id, chat_id):
     connection.close()
 
     return id[0]
+
+
+def new_coefficient(file_id, coefficient):
+    connection = sqlite3.connect("database/database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("UPDATE media SET coefficient = ? WHERE id = ?", (coefficient, file_id))
+
+    connection.commit()
+    connection.close()

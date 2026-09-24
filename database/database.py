@@ -1,4 +1,5 @@
 import sqlite3
+from config import DEFAULT_SHAKAL_COEFFICIENT
 
 
 def init_database():
@@ -12,12 +13,13 @@ def init_database():
         unlimited INT DEFAULT 0
     )""")
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS media (
+    cursor.execute(f"""CREATE TABLE IF NOT EXISTS media (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         file_id TEXT UNIQUE,
         file_unique_id TEXT UNIQUE,
         message_id INT,
-        chat_id INT
+        chat_id INT,
+        coefficient INT DEFAULT {DEFAULT_SHAKAL_COEFFICIENT}
     )""")
 
     connection.commit()

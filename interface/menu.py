@@ -12,7 +12,7 @@ def start_menu(chat_id, message_to_edit_id=None):
                 message_id=message_to_edit_id,
                 media=types.InputMediaPhoto(
                     media=types.InputFile(photo),
-                    caption="JKL - Инструменты обработки медиа \n\nПришлите боту файл либо выберете вариант обработки кнопкой ниже",
+                    caption="JackalX - Инструменты обработки медиа \n\nПришлите боту файл либо выберете вариант обработки кнопкой ниже",
                 ),
                 reply_markup=inline.start_inline(),
             )
@@ -21,7 +21,7 @@ def start_menu(chat_id, message_to_edit_id=None):
             bot.send_photo(
                 chat_id=chat_id,
                 photo=photo,
-                caption="JKL - Инструменты обработки медиа \n\nПришлите боту файл либо выберете вариант обработки кнопкой ниже",
+                caption="JackalX - Инструменты обработки медиа \n\nПришлите боту файл либо выберете вариант обработки кнопкой ниже",
                 reply_markup=inline.start_inline(),
             )
 
@@ -52,7 +52,7 @@ def done_photo_menu(chat_id, message_to_edit_id, photo, photo_id, process_time):
         message_id=message_to_edit_id,
         media=types.InputMediaPhoto(
             media=types.InputFile(photo),
-            caption=f"Фото обработанно.\n\nВремя на обработку: {process_time} сек."
+            caption=f"Фото обработанно.\n\nВремя на обработку: {process_time:.2f} сек."
         ),
         reply_markup=inline.done_shakal_photo_inline(photo_id)
     )
@@ -63,8 +63,28 @@ def variants_categories_menu(chat_id, message_to_edit_id):
     bot.edit_message_caption(
         chat_id=chat_id,
         message_id=message_to_edit_id,
-        caption="Выберите категорию контента и вариант его обработки кноками ниже.",
+        caption="Выберите тип медиа",
         reply_markup=inline.variants_inline(),
+    )
+
+
+def variants_photos_menu(chat_id, message_to_edit_id):
+
+    bot.edit_message_caption(
+        chat_id=chat_id,
+        message_id=message_to_edit_id,
+        caption="Выберите вариант обработки медиа",
+        reply_markup=inline.variants_photo_inline(),
+    )
+
+
+def shakal_photo_menu(chat_id, message_to_edit_id):
+
+    return bot.edit_message_caption(
+        chat_id=chat_id,
+        message_id=message_to_edit_id,
+        caption="Пришлите в чат фото для шакализации",
+        reply_markup=inline.back_inline()
     )
 
 

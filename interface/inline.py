@@ -1,4 +1,6 @@
 from telebot import types
+from middleware import get
+from config import DEFAULT_SHAKAL_COEFFICIENT
 
 
 def start_inline():
@@ -18,10 +20,10 @@ def recv_photo_inline(photo_id):
     markup = types.InlineKeyboardMarkup()
 
     shakal = types.InlineKeyboardButton(
-        text="🧨 Шакал", callback_data=f"process:photo:shakal:{photo_id}"
+        text="🧨 Шакал", callback_data=f"process:photo:shakal:{photo_id}:{DEFAULT_SHAKAL_COEFFICIENT}"
     )
     shakalplus = types.InlineKeyboardButton(
-        text="💥 Шакал +", callback_data=f"process:photo:shakalplus:{photo_id}"
+        text="💥 Шакал +", callback_data=f"process:photo:shakalplus:{photo_id}:{DEFAULT_SHAKAL_COEFFICIENT}"
     )
     cancel = types.InlineKeyboardButton(text="❌ Отмена", callback_data="menu:start")
 
@@ -34,11 +36,14 @@ def recv_photo_inline(photo_id):
 def done_shakal_photo_inline(photo_id):
     markup = types.InlineKeyboardMarkup()
 
+    more_coefficient = round(get.coefficient(photo_id) + 0.04, 2)
+    less_coefficient = round(get.coefficient(photo_id) - 0.04, 2)
+
     more = types.InlineKeyboardButton(
-        text="Больше", callback_data=f"process:photo:shakal:{photo_id}"
+        text="📈 Больше", callback_data=f"process:photo:shakal:{photo_id}:{more_coefficient}"
     )
     less = types.InlineKeyboardButton(
-        text="Меньше", callback_data=f"process:photo:shakal:{photo_id}"
+        text="📉 Меньше", callback_data=f"process:photo:shakal:{photo_id}:{less_coefficient}"
     )
     back = types.InlineKeyboardButton(text="◀️ Назад", callback_data="menu:start")
 
@@ -61,6 +66,33 @@ def variants_inline():
     back = types.InlineKeyboardButton(text="◀️ Назад", callback_data="menu:start")
 
     markup.row(photo, video, gif)
+    markup.add(back)
+
+    return markup
+
+
+def variants_photo_inline():
+    markup = types.InlineKeyboardMarkup()
+
+    shakal = types.InlineKeyboardButton(
+        text="🧨 Шакал", callback_data=f"process:photo:shakal"
+    )
+    shakalplus = types.InlineKeyboardButton(
+        text="💥 Шакал +", callback_data=f"process:photo:shakalplus"
+    )
+    back = types.InlineKeyboardButton(text="◀️ Назад", callback_data="menu:start")
+
+    markup.row(shakal, shakalplus)
+    markup.add(back)
+
+    return markup
+
+
+def back_inline():
+    markup = types.InlineKeyboardMarkup()
+
+    back = types.InlineKeyboardButton(text="◀️ Назад", callback_data="menu:start")
+
     markup.add(back)
 
     return markup
