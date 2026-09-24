@@ -83,7 +83,7 @@ def shakal_photo_menu(chat_id, message_to_edit_id):
     return bot.edit_message_caption(
         chat_id=chat_id,
         message_id=message_to_edit_id,
-        caption="Пришлите в чат фото для шакализации",
+        caption="Пришлите в чат фото для обработки",
         reply_markup=inline.back_inline()
     )
 
